@@ -1,5 +1,28 @@
+* {
+  font-family:"Helvetica", "Arial";
+}
+
+body {
+  margin:0;
+}
+
+#content {
+  width:100%;
+}
+
+#container {
+  margin:10px auto;
+  width:482px;
+}
+
+#container p {
+  color:#333;
+  margin:0;
+  padding:0;
+}
+
 .hasCountdown {
-  font-size: 13.4em;
+  font-size:13.4em;
 }
 
 button {
