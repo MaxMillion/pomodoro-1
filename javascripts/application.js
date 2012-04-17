@@ -26,7 +26,7 @@ $(document).ready(function(){
   }
 
   function setHistory(button){
-    if (period != undefined){
+    if (button != undefined){
       var date = new Date();
       var dateParsed = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
       $('#history').prepend($("<li> You started a new " + button.name + " </li>"))
