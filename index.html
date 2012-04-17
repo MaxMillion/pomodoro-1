@@ -6,14 +6,18 @@
     <script src="javascripts/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="javascripts/jquery.countdown.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="javascripts/application.js" type="text/javascript" charset="utf-8"></script>
+    <script src="javascripts/jquery.timeago.js" type="text/javascript" charset="utf-8"></script>
   </head>
 
   <body>
     <div id="content">
       <div id="container">
-        <button id="pomodoro"> Pomodoro </button>
-        <button id="short_break"> Short Break </button>
-        <p id="countdown"></p>
+        <button id="pomodoro" name="Pomodoro"> Pomodoro </button>
+        <button id="short_break" name="Short Break"> Short Break </button>
+        <div id="clock">
+          <span id="countdown"></span>
+        </div>
+        <ul id="history"></ul>
       </div>
     </div>
   </body>
