@@ -21,6 +21,16 @@ body {
   padding:0;
 }
 
+ul#history {
+  height:150px;
+  overflow:hidden;
+}
+
+ul#history li {
+  list-style-type:none;
+  margin:10px 0px;
+}
+
 .hasCountdown {
   font-size:13.4em;
 }
