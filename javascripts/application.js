@@ -5,6 +5,8 @@ $(document).ready(function(){
     if (!$(this).hasClass("clicked")){
       var data_time   = $(this).attr("data-time") || 0
       var miliseconds = Date.now() + (data_time * 60 * 1000);
+      var counter = parseInt($(this).attr("data-count"));
+      $(this).attr("data-count", counter + 1);
       setPomodoroTime(miliseconds, this);
     }
   });
@@ -13,6 +15,7 @@ $(document).ready(function(){
     buttonState(button, "clicked");
     if (time === undefined){ time = 0; }
     if(button !== undefined) { setHistory(button); }
+
 
     $('#countdown').countdown('destroy');
     $("#countdown").countdown({
@@ -25,7 +28,7 @@ $(document).ready(function(){
 
   function setHistory(button){
     if (button != undefined) {
-      var text =  $(button).attr("data-text") || "You started a new ";
+      var text =  $(button).attr("data-text") || "You started your " + $(button).attr("data-count") + " " ;
       var li          = $("<li/>", {"text": text + button.name + " "});
       var date        = new Date();
       var dateParsed  = new Date(date.getFullYear(),
