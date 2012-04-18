@@ -12,13 +12,25 @@
   <body>
     <div id="content">
       <div id="container">
-        <button id="pomodoro" name="Pomodoro"> Pomodoro </button>
-        <button id="short_break" name="Short Break"> Short Break </button>
+        <ul class="action_buttons">
+          <li>
+            <button name="Pomodoro" data-time="25"> Pomodoro </button>
+          </li>
+          <li>
+            <button name="Short Break" data-time="5"> Short Break </button>
+          </li>
+          <li>
+            <button name="Long Break" data-time="10"> Long Break </button>
+          </li>
+          <li>
+            <button name="Reset"> Reset </button>
+          </li>
+        </ul>
         <div id="clock">
           <span id="countdown"></span>
         </div>
         <div id="history_board">
-          <ul id="history"></ul>
+          <ul class="history"></ul>
         </div>
       </div>
     </div>

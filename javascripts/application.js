@@ -1,22 +1,20 @@
 $(document).ready(function(){
   setPomodoroTime();
 
-  $("#pomodoro").click(function(){
-    var pomodoro = Date.now() + (25 * 60 * 1000);
-    setPomodoroTime(pomodoro, this);
-  });
-
-  $("#short_break").click(function(){
-    var short_break = Date.now() + (5 * 60 * 1000);
-    setPomodoroTime(short_break, this);
+  $("button").click(function(){
+    if (!$(this).hasClass("clicked")){
+      var data_time   = $(this).attr("data-time") || 0
+      var miliseconds = Date.now() + (data_time * 60 * 1000);
+      setPomodoroTime(miliseconds, this);
+    }
   });
 
   function setPomodoroTime(time, button){
     buttonState(button, "clicked");
+    if (time === undefined){ time = 0; }
+    if(button !== undefined) { setHistory(button); }
 
-    if (time === undefined){ time = 0 }
     $('#countdown').countdown('destroy');
-    setHistory(button);
     $("#countdown").countdown({
       until: new Date(time),
       format: 'MS',
@@ -27,26 +25,27 @@ $(document).ready(function(){
 
   function setHistory(button){
     if (button != undefined){
-      var date = new Date();
-      var dateParsed = new Date(date.getFullYear(),
+      var li          = $("<li/>", {"text": "You started a new " + button.name + " "});
+      var date        = new Date();
+      var dateParsed  = new Date(date.getFullYear(),
                                 date.getMonth(),
                                 date.getDate(),
                                 date.getHours(),
                                 date.getMinutes(),
                                 date.getSeconds()).toISOString();
-      $('#history_board').show("fast");
 
-      var li = $("<li/>", {"text": "You started a new " + button.name + " "});
       li.append($("<time/>", {"datetime": dateParsed}));
       li.find("time").timeago();
-      $('#history').prepend(li);
+
+      $('#history_board').show("fast");
+      $('ul.history').prepend(li);
     }
   }
 
   function buttonState(button, state){
     if (button !== undefined){
       $('button[name!="'+button.name+'"]').removeClass();
-      $(button).addClass(state);
+      $(button).removeClass().addClass(state);
     }
   }
 
