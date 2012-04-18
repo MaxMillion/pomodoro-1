@@ -28,10 +28,18 @@ $(document).ready(function(){
   function setHistory(button){
     if (button != undefined){
       var date = new Date();
-      var dateParsed = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-      $('#history').prepend($("<li> You started a new " + button.name + " </li>"))
-      $('#history li:first').append("<abbr title=\" " + dateParsed +  "\"></abbr>")
-      $('#history li:first abbr').timeago();
+      var dateParsed = new Date(date.getFullYear(),
+                                date.getMonth(),
+                                date.getDate(),
+                                date.getHours(),
+                                date.getMinutes(),
+                                date.getSeconds()).toISOString();
+      $('#history_board').show("fast");
+
+      var li = $("<li/>", {"text": "You started a new " + button.name + " "});
+      li.append($("<time/>", {"datetime": dateParsed}));
+      li.find("time").timeago();
+      $('#history').prepend(li);
     }
   }
 
@@ -43,6 +51,6 @@ $(document).ready(function(){
   }
 
   function buttonFinished(){
-    $("button.clicked").toggleClass("clicked finished")
+    $("button.clicked").toggleClass("clicked finished");
   }
 });
