@@ -24,15 +24,16 @@ $(document).ready(function(){
   }
 
   function setHistory(button){
-    if (button != undefined){
-      var li          = $("<li/>", {"text": "You started a new " + button.name + " "});
+    if (button != undefined) {
+      var text =  $(button).attr("data-text") || "You started a new ";
+      var li          = $("<li/>", {"text": text + button.name + " "});
       var date        = new Date();
       var dateParsed  = new Date(date.getFullYear(),
-                                date.getMonth(),
-                                date.getDate(),
-                                date.getHours(),
-                                date.getMinutes(),
-                                date.getSeconds()).toISOString();
+          date.getMonth(),
+          date.getDate(),
+          date.getHours(),
+          date.getMinutes(),
+          date.getSeconds()).toISOString();
 
       li.append($("<time/>", {"datetime": dateParsed}));
       li.find("time").timeago();
@@ -41,6 +42,7 @@ $(document).ready(function(){
       $('ul.history').prepend(li);
     }
   }
+
 
   function buttonState(button, state){
     if (button !== undefined){
