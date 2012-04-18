@@ -54,14 +54,14 @@ ul.action_buttons li {
   -webkit-box-shadow: 0 0 10px 1px#c4c4c4;
   box-shadow: 0 0 10px 1px #c4c4c4;
   margin-top: 10px;
-  width: 555px;
+  width: 542px;
   -moz-border-radius: 75px;
   -webkit-border-radius: 15px;
   display:none
 }
 
 ul.history {
-  height:155px;
+  height:150px;
   overflow:hidden;
 }
 
