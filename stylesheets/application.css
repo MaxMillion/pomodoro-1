@@ -48,6 +48,10 @@ ul.action_buttons li {
   padding:0;
 }
 
+#clock span.clock_red {
+  color:red;
+}
+
 #history_board {
   background-color: #FFF;
   border: 1px solid #C4C4C4;
