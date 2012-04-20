@@ -36,15 +36,15 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
 
 /* Inicia o Countdown */
 Pomodoro.prototype.setTime = function(button){
-  var that                = this;
-  var data_time           = $(button).attr("data-time") || 0;
-  var miliseconds         = (data_time * 60 * 1000);
-  var time_in_miliseconds = Date.now() + miliseconds;
+  var that                = this,
+    data_time           = $(button).attr("data-time") || 0,
+    miliseconds         = (data_time * 60 * 1000),
+    time_in_miliseconds = Date.now() + miliseconds;
 
   this.buttonState(button, "clicked");
   this.clearTimeouts();
 
-  if(button !== undefined){ this.history(button); }
+  if (typeof button !== 'undefined'){ this.history(button); }
   if (this.countdown.hasClass("clock_red")) { this.changeColor(); }
 
   $('#countdown').countdown('destroy');
@@ -59,7 +59,7 @@ Pomodoro.prototype.setTime = function(button){
 
 /* Toda vez que um botão for clicado, joga as informações sobre ele no histórico */
 Pomodoro.prototype.history = function(button){
-  if (button != undefined) {
+  if (typeof button != 'undefined') {
     var text        = $(button).attr("data-text") || "You started your " + $(button).attr("data-count") + " " ;
     var li          = $("<li/>", {"text": text + button.name + " "});
     var date        = new Date();
@@ -81,7 +81,7 @@ Pomodoro.prototype.history = function(button){
 /* Zera as classes de todos os outros botões e aplica a classe no botão
  * passado como parâmetro */
 Pomodoro.prototype.buttonState = function(button, state){
-  if (button !== undefined){
+  if (typeof button !== 'undefined'){
     $('button[name!="'+button.name+'"]').removeClass();
     $(button).removeClass().addClass(state);
     this.playAlarm($(button));
@@ -97,7 +97,7 @@ Pomodoro.prototype.buttonFinished = function(){
 }
 
 Pomodoro.prototype.playAlarm = function (button){
-  if (button !== undefined){
+  if (typeof button !== 'undefined'){
     this.sound.html("<embed src=sounds/" + button.attr("class") + ".wav hidden=true autostart=true loop=false>");
   }
 }
