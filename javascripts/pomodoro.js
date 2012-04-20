@@ -36,10 +36,10 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
 
 /* Inicia o Countdown */
 Pomodoro.prototype.setTime = function(button){
-  var that                = this,
-    data_time           = $(button).attr("data-time") || 0,
-    miliseconds         = (data_time * 60 * 1000),
-    time_in_miliseconds = Date.now() + miliseconds;
+  var that                = this;
+  var data_time           = $(button).attr("data-time") || 0;
+  var miliseconds         = (data_time * 60 * 1000);
+  var time_in_miliseconds = Date.now() + miliseconds;
 
   this.buttonState(button, "clicked");
   this.clearTimeouts();
