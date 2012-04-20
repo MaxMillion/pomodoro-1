@@ -29,8 +29,8 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
   var that = this;
 
   if ($(button).attr("name") != "Reset" && button !== undefined){
-    this.timeout_sound = setTimeout(function(){that.buttonFinished()}, miliseconds);
-    this.timeout_red_css = setTimeout(function(){that.changeColor()}, (miliseconds - 15000));
+    this.timeout_sound = setTimeout(that.buttonFinished, miliseconds);
+    this.timeout_red_css = setTimeout(that.changeColor, (miliseconds - 15000));
   }
 }
 
