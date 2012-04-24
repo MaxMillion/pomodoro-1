@@ -9,9 +9,9 @@ var Pomodoro = function(){
 
   $("button").click(function () {
     if (!$(this).hasClass("clicked")) {
-      var counter = parseInt($(this).attr("data-count"), 10);
+      var counter = $(this).data("count");
 
-      $(this).attr("data-count", counter+=1);
+      $(this).data("count", counter+=1);
 
       that.setTime(this);
     }
@@ -34,7 +34,7 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
 
 /* Inicia o Countdown */
 Pomodoro.prototype.setTime = function(button){
-  var data_time           = $(button).attr("data-time") || 0;
+  var data_time           = $(button).data("time") || 0;
   var miliseconds         = (data_time * 60 * 1000);
   var time_in_miliseconds = Date.now() + miliseconds;
 
@@ -57,7 +57,7 @@ Pomodoro.prototype.setTime = function(button){
 /* Toda vez que um botão for clicado, joga as informações sobre ele no histórico */
 Pomodoro.prototype.history = function(button){
   if (typeof button != 'undefined') {
-    var text        = $(button).attr("data-text") || "You started your " + $(button).attr("data-count") + " " ;
+    var text        = $(button).data("text") || "You started your " + $(button).data("count") + " " ;
     var li          = $("<li/>", {"text": text + button.name + " "});
     var date        = new Date();
     var dateParsed  = new Date(date.getFullYear(),
