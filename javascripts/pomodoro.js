@@ -57,18 +57,11 @@ Pomodoro.prototype.setTime = function(button){
 /* Toda vez que um botão for clicado, joga as informações sobre ele no histórico */
 Pomodoro.prototype.history = function(button){
   if (typeof button != 'undefined') {
-    var text        = $(button).data("text") || "You started your " + $(button).data("count") + " " ;
-    var li          = $("<li/>", {"text": text + button.name + " "});
-    var date        = new Date();
-    var dateParsed  = new Date(date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds()).toISOString();
+    var text = $(button).data("text") || "You started your " + $(button).data("count") + " " ;
+    var li   = $("<li/>", {"text": text + button.name + " "});
+    var date = new Date().toISOString();
 
-    li.append($("<time/>", {"datetime": dateParsed}));
-    li.find("time").timeago();
+    li.append($("<time/>", {"datetime": date})).find("time").timeago();
 
     this.history_content.parent().show("fast");
     this.history_content.prepend(li);
