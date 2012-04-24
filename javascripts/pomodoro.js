@@ -26,17 +26,14 @@ Pomodoro.prototype.clearTimeouts = function(){
 }
 
 Pomodoro.prototype.setTimeouts = function(button, miliseconds){
-  var that = this;
-
   if ($(button).attr("name") != "Reset" && button !== undefined){
-    this.timeout_sound = setTimeout(that.buttonFinished, miliseconds);
-    this.timeout_red_css = setTimeout(that.changeColor, (miliseconds - 15000));
+    this.timeout_sound = setTimeout(this.buttonFinished, miliseconds);
+    this.timeout_red_css = setTimeout(this.changeColor, (miliseconds - 15000));
   }
 }
 
 /* Inicia o Countdown */
 Pomodoro.prototype.setTime = function(button){
-  var that                = this;
   var data_time           = $(button).attr("data-time") || 0;
   var miliseconds         = (data_time * 60 * 1000);
   var time_in_miliseconds = Date.now() + miliseconds;
