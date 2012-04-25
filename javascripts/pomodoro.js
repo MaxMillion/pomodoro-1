@@ -84,9 +84,9 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
 }
 
 Pomodoro.prototype.startCountdown = function(button){
-  var data_time           = $(button).data("time") || 0;
-  var miliseconds         = (data_time * 60 * 1000);
-  var time_in_miliseconds = Date.now() + miliseconds;
+  var countdownInMin  = $(button).data("time") || 0;
+  var countdownInMs   = (countdownInMin * 60 * 1000);
+  var targetTimestamp = Date.now() + countdownInMs;
 
   this.buttonState(button, "clicked");
   this.clearTimeouts();
@@ -96,12 +96,12 @@ Pomodoro.prototype.startCountdown = function(button){
 
   $('#countdown').countdown('destroy');
   $("#countdown").countdown({
-    until: new Date(time_in_miliseconds),
+    until: new Date(targetTimestamp),
     format: 'MS',
     layout: "{mnn}{sep}{snn}"
   });
 
-  this.setTimeouts(button, miliseconds);
+  this.setTimeouts(button, countdownInMs);
 }
 
 /* Toda vez que um botão for clicado, joga as informações sobre ele no histórico */
@@ -122,7 +122,7 @@ Pomodoro.prototype.history = function(button){
  * passado como parâmetro */
 Pomodoro.prototype.buttonState = function(button, state){
   if (typeof button !== 'undefined'){
-    $('button[name!="'+button.name+'"]').removeClass();
+    $(button).siblings().removeClass();
     $(button).removeClass().addClass(state);
     this.playAlarm($(button));
   }

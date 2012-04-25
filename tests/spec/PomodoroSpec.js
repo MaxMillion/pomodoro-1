@@ -4,10 +4,10 @@ describe("Pomodoro", function(){
 
   beforeEach(function() {
     jasmine.getFixtures().set(
-      '<button name="Pomodoro" data-time="25" data-count="0"> Pomodoro </button> <button name="Short Break" data-time="5" data-count="0"> Short Break </button> <button name="Long Break" data-time="10" data-count="0"> Long Break </button> <button name="Reset" data-text="You pressed "> Reset </button> <ul class="history"></ul> <div id="clock"></div> <span id="countdown"></span> <div id="sound_element"></div>'
+      '<div id="pomodoro"></div>'
       );
 
-    pomodoro = new Pomodoro();
+    pomodoro = new Pomodoro($('#pomodoro'));
   });
 
   describe("Pomodoro button", function(){
@@ -21,7 +21,7 @@ describe("Pomodoro", function(){
     });
 
     it("should have the 'embed' tag when clicked", function() {
-      var sound_element = $("#sound_element")
+      var sound_element = $("#sound_element");
       expect( sound_element ).toContain("embed");
     });
 
