@@ -7,9 +7,9 @@ var Pomodoro = function (container){
 
   this.timeout_sound   = null;
   this.timeout_red_css = null;
-  this.countdown       = $("#countdown");
-  this.history_content = $('ul.history');
-  this.sound           = $("#sound_element");
+  this.countdown       = null;
+  this.history_content = null;
+  this.sound           = null;
 
   this.createUI();
   this.startCountdown();
@@ -41,27 +41,31 @@ Pomodoro.prototype.createActions = function() {
   this.$longBreak  = $('<li/>').append(this.createButton('Long Break', {time:10, count:0}));
   this.$reset      = $('<li/>').append(this.createButton('Reset', {text:'You pressed '}));
 
-  var $actions     = $('<ul/>', {class:'action_buttons'}).append(this.$pomodoro).append(this.$shortBreak).append(this.$longBreak).append(this.$reset);
+  this.$actions     = $('<ul/>', {class:'action_buttons'}).append(this.$pomodoro).append(this.$shortBreak).append(this.$longBreak).append(this.$reset);
 
-  this.$container.append($actions);
+  this.$container.append(this.$actions);
 };
 
 Pomodoro.prototype.createClock = function() {
-  var $clock = $('<div/>', {id:'clock'}).append($('<span/>', {id:'countdown'}));
+  this.$countdown = $('<span/>', {id:'countdown'});
+
+  var $clock = $('<div/>', {id:'clock'}).append(this.$countdown);
 
   this.$container.append($clock);
 };
 
 Pomodoro.prototype.createHistory = function() {
-  var $history = $('<div/>', {id:'history_board'}).append($('<ul/>', {class:'history'}));
+  this.history_content = $('<ul/>', {class:'history'});
+
+  var $history = $('<div/>', {id:'history_board'}).append(this.history_content);
 
   this.$container.append($history);
 };
 
 Pomodoro.prototype.createSound = function() {
-  var $sound = $('<div/>', {id:'sound_element'});
+  this.sound = $('<div/>', {id:'sound_element'});
 
-  this.$container.append($sound);
+  this.$container.append(this.sound);
 };
 
 Pomodoro.prototype.createUI = function() {
@@ -83,6 +87,16 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
   }
 }
 
+/* Zera as classes de todos os outros botões e aplica a classe no botão
+ * passado como parâmetro */
+Pomodoro.prototype.buttonState = function(button, state){
+  if (typeof button !== 'undefined'){
+    this.$container.find('button').not(button).removeClass();
+    $(button).removeClass().addClass(state);
+    this.playAlarm($(button));
+  }
+}
+
 Pomodoro.prototype.startCountdown = function(button){
   var countdownInMin  = $(button).data("time") || 0;
   var countdownInMs   = (countdownInMin * 60 * 1000);
@@ -92,7 +106,7 @@ Pomodoro.prototype.startCountdown = function(button){
   this.clearTimeouts();
 
   if (typeof button !== 'undefined'){ this.history(button); }
-  if (this.countdown.hasClass("clock_red")) { this.changeColor(); }
+  if (this.countdown && this.countdown.hasClass("clock_red")) { this.changeColor(); }
 
   $('#countdown').countdown('destroy');
   $("#countdown").countdown({
@@ -115,16 +129,6 @@ Pomodoro.prototype.history = function(button){
 
     this.history_content.parent().show("fast");
     this.history_content.prepend(li);
-  }
-}
-
-/* Zera as classes de todos os outros botões e aplica a classe no botão
- * passado como parâmetro */
-Pomodoro.prototype.buttonState = function(button, state){
-  if (typeof button !== 'undefined'){
-    $(button).siblings().removeClass();
-    $(button).removeClass().addClass(state);
-    this.playAlarm($(button));
   }
 }
 
