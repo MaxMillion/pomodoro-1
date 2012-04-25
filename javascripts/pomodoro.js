@@ -12,7 +12,7 @@ var Pomodoro = function (container){
   this.sound           = $("#sound_element");
 
   this.createUI();
-  this.setTime();
+  this.startCountdown();
 }
 
 Pomodoro.prototype.createButton = function(name, data) {
@@ -27,7 +27,7 @@ Pomodoro.prototype.createButton = function(name, data) {
 
         $(this).data("count", counter+=1);
 
-        that.setTime(this);
+        that.startCountdown(this);
       }
     }
   };
@@ -83,8 +83,7 @@ Pomodoro.prototype.setTimeouts = function(button, miliseconds){
   }
 }
 
-/* Inicia o Countdown */
-Pomodoro.prototype.setTime = function(button){
+Pomodoro.prototype.startCountdown = function(button){
   var data_time           = $(button).data("time") || 0;
   var miliseconds         = (data_time * 60 * 1000);
   var time_in_miliseconds = Date.now() + miliseconds;
