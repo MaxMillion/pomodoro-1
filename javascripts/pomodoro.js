@@ -1,7 +1,8 @@
 var Pomodoro = function (container){
   this.CONST = {
     PRESSED: 'clicked',
-    NEAR_END: 'clock_red'
+    NEAR_END: 'clock_red',
+    FINISHED: 'finished'
   };
 
   this.$container       = $(container);
@@ -27,7 +28,7 @@ Pomodoro.prototype.createButton = function(name, data) {
     text: name,
     data: data,
     click: function () {
-      if (!$(this).hasClass("clicked")) {
+      if (!$(this).hasClass(that.CONST.PRESSED)) {
         var counter = $(this).data("count");
 
         $(this).data("count", counter+=1);
@@ -86,9 +87,8 @@ Pomodoro.prototype.clearTimeouts = function(){
 }
 
 Pomodoro.prototype.markAsFinished = function(){
-  var button = $("button.clicked");
-  console.log($('button'));
-  button.toggleClass("clicked finished");
+  var button = $('.' + this.CONST.PRESSED, this.$container);
+  button.toggleClass(this.CONST.PRESSED + ' ' + this.CONST.FINISHED);
   this.playAlarm(button);
 }
 
