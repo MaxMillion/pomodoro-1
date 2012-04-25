@@ -1,15 +1,20 @@
 var Pomodoro = function (container){
-  this.$container  = $(container);
-  this.$pomodoro   = null;
-  this.$shortBreak = null;
-  this.$longBreak  = null;
-  this.$reset      = null;
+  this.CONST = {
+    PRESSED: 'clicked',
+    NEAR_END: 'clock_red'
+  };
+
+  this.$container       = $(container);
+  this.$pomodoro        = null;
+  this.$shortBreak      = null;
+  this.$longBreak       = null;
+  this.$reset           = null;
+  this.$countdown       = null;
+  this.$history_content = null;
+  this.$sound           = null;
 
   this.timeout_sound   = null;
   this.timeout_red_css = null;
-  this.countdown       = null;
-  this.history_content = null;
-  this.sound           = null;
 
   this.createUI();
   this.startCountdown();
@@ -55,17 +60,17 @@ Pomodoro.prototype.createClock = function() {
 };
 
 Pomodoro.prototype.createHistory = function() {
-  this.history_content = $('<ul/>', {class:'history'});
+  this.$history_content = $('<ul/>', {class:'history'});
 
-  var $history = $('<div/>', {id:'history_board'}).append(this.history_content);
+  var $history = $('<div/>', {id:'history_board'}).append(this.$history_content);
 
   this.$container.append($history);
 };
 
 Pomodoro.prototype.createSound = function() {
-  this.sound = $('<div/>', {id:'sound_element'});
+  this.$sound = $('<div/>', {id:'sound_element'});
 
-  this.$container.append(this.sound);
+  this.$container.append(this.$sound);
 };
 
 Pomodoro.prototype.createUI = function() {
@@ -80,18 +85,28 @@ Pomodoro.prototype.clearTimeouts = function(){
   clearTimeout(this.timeout_red_css);
 }
 
+Pomodoro.prototype.markAsFinished = function(){
+  var button = $("button.clicked");
+  console.log($('button'));
+  button.toggleClass("clicked finished");
+  this.playAlarm(button);
+}
+
+Pomodoro.prototype.theEndIsNear = function (){
+  this.$countdown.toggleClass(this.CONST.NEAR_END);
+}
+
 Pomodoro.prototype.setTimeouts = function(button, miliseconds){
   if ($(button).not(this.$reset)){
-    this.timeout_sound   = setTimeout(this.buttonFinished, miliseconds);
-    this.timeout_red_css = setTimeout(this.changeColor, (miliseconds - 15000));
+    this.timeout_sound   = setTimeout(this.markAsFinished, miliseconds);
+    this.timeout_red_css = setTimeout(this.theEndIsNear, (miliseconds - 15000));
   }
 }
 
 Pomodoro.prototype.markAsClicked = function(button){
-  var state = 'clicked';
   if (typeof button !== 'undefined'){
     this.$container.find('button').not(button).removeClass();
-    $(button).removeClass().addClass(state);
+    $(button).removeClass().addClass(this.CONST.PRESSED);
     this.playAlarm($(button));
   }
 }
@@ -101,14 +116,14 @@ Pomodoro.prototype.startCountdown = function(button){
   var countdownInMs   = (countdownInMin * 60 * 1000);
   var targetTimestamp = Date.now() + countdownInMs;
 
-  this.markAsClicked(button, "clicked");
+  this.markAsClicked(button);
   this.clearTimeouts();
 
-  if (typeof button !== 'undefined'){ this.history(button); }
-  if (this.countdown && this.countdown.hasClass("clock_red")) { this.changeColor(); }
+  if (typeof button !== 'undefined'){ this.logActionFrom(button); }
+  if (this.$countdown.hasClass(this.CONST.NEAR_END)) { this.theEndIsNear(); }
 
-  $('#countdown').countdown('destroy');
-  $("#countdown").countdown({
+  this.$countdown.countdown('destroy');
+  this.$countdown.countdown({
     until: new Date(targetTimestamp),
     format: 'MS',
     layout: "{mnn}{sep}{snn}"
@@ -117,8 +132,7 @@ Pomodoro.prototype.startCountdown = function(button){
   this.setTimeouts(button, countdownInMs);
 }
 
-/* Toda vez que um botão for clicado, joga as informações sobre ele no histórico */
-Pomodoro.prototype.history = function(button){
+Pomodoro.prototype.logActionFrom = function(button){
   if (typeof button != 'undefined') {
     var text = $(button).data("text") || "You started your " + $(button).data("count") + " " ;
     var li   = $("<li/>", {"text": text + button.name + " "});
@@ -126,25 +140,13 @@ Pomodoro.prototype.history = function(button){
 
     li.append($("<time/>", {"datetime": date})).find("time").timeago();
 
-    this.history_content.parent().show("fast");
-    this.history_content.prepend(li);
+    this.$history_content.parent().show("fast");
+    this.$history_content.prepend(li);
   }
-}
-
-/* Muda a classe do botão que está clicado pra finalizado */
-Pomodoro.prototype.buttonFinished = function(){
-  var button = $("button.clicked");
-
-  button.toggleClass("clicked finished");
-  this.playAlarm(button);
 }
 
 Pomodoro.prototype.playAlarm = function (button){
   if (typeof button !== 'undefined'){
-    this.sound.html("<embed src=sounds/" + button.attr("class") + ".wav hidden=true autostart=true loop=false>");
+    this.$sound.html("<embed src=sounds/" + button.attr("class") + ".wav hidden=true autostart=true loop=false>");
   }
-}
-
-Pomodoro.prototype.changeColor = function (){
-  this.countdown.toggleClass("clock_red");
 }
