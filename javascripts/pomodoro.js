@@ -11,29 +11,27 @@ var Pomodoro = function (container){
   this.history_content = $('ul.history');
   this.sound           = $("#sound_element");
 
-  var that = this;
-
   this.createUI();
-
-  $("button").click(function () {
-    if (!$(this).hasClass("clicked")) {
-      var counter = $(this).data("count");
-
-      $(this).data("count", counter+=1);
-
-      that.setTime(this);
-    }
-  });
-
   this.setTime();
 }
 
 Pomodoro.prototype.createButton = function(name, data) {
+  var that  = this;
   var props = {
     name: name,
     text: name,
-    data: data
+    data: data,
+    click: function () {
+      if (!$(this).hasClass("clicked")) {
+        var counter = $(this).data("count");
+
+        $(this).data("count", counter+=1);
+
+        that.setTime(this);
+      }
+    }
   };
+
   return $('<button/>', props);
 };
 
