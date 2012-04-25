@@ -1,3 +1,3 @@
 $(document).ready(function(){
-  new Pomodoro();
+  new Pomodoro($('#pomodoro'));
 });

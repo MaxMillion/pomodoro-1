@@ -1,11 +1,19 @@
-var Pomodoro = function(){
-  this.timeout_sound    = null;
-  this.timeout_red_css  = null;
-  this.countdown        = $("#countdown");
-  this.history_content  = $('ul.history');
-  this.sound            = $("#sound_element");
+var Pomodoro = function (container){
+  this.$container  = $(container);
+  this.$pomodoro   = null;
+  this.$shortBreak = null;
+  this.$longBreak  = null;
+  this.$reset      = null;
+
+  this.timeout_sound   = null;
+  this.timeout_red_css = null;
+  this.countdown       = $("#countdown");
+  this.history_content = $('ul.history');
+  this.sound           = $("#sound_element");
 
   var that = this;
+
+  this.createUI();
 
   $("button").click(function () {
     if (!$(this).hasClass("clicked")) {
@@ -19,6 +27,51 @@ var Pomodoro = function(){
 
   this.setTime();
 }
+
+Pomodoro.prototype.createButton = function(name, data) {
+  var props = {
+    name: name,
+    text: name,
+    data: data
+  };
+  return $('<button/>', props);
+};
+
+Pomodoro.prototype.createActions = function() {
+  this.$pomodoro   = $('<li/>').append(this.createButton('Pomodoro', {time:25, count:0}));
+  this.$shortBreak = $('<li/>').append(this.createButton('Short Break', {time:5, count:0}));
+  this.$longBreak  = $('<li/>').append(this.createButton('Long Break', {time:10, count:0}));
+  this.$reset      = $('<li/>').append(this.createButton('Reset', {text:'You pressed '}));
+
+  var $actions     = $('<ul/>', {class:'action_buttons'}).append(this.$pomodoro).append(this.$shortBreak).append(this.$longBreak).append(this.$reset);
+
+  this.$container.append($actions);
+};
+
+Pomodoro.prototype.createClock = function() {
+  var $clock = $('<div/>', {id:'clock'}).append($('<span/>', {id:'countdown'}));
+
+  this.$container.append($clock);
+};
+
+Pomodoro.prototype.createHistory = function() {
+  var $history = $('<div/>', {id:'history_board'}).append($('<ul/>', {class:'history'}));
+
+  this.$container.append($history);
+};
+
+Pomodoro.prototype.createSound = function() {
+  var $sound = $('<div/>', {id:'sound_element'});
+
+  this.$container.append($sound);
+};
+
+Pomodoro.prototype.createUI = function() {
+  this.createActions();
+  this.createClock();
+  this.createHistory();
+  this.createSound();
+};
 
 Pomodoro.prototype.clearTimeouts = function(){
   clearTimeout(this.timeout_sound);
