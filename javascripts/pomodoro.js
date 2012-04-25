@@ -81,15 +81,14 @@ Pomodoro.prototype.clearTimeouts = function(){
 }
 
 Pomodoro.prototype.setTimeouts = function(button, miliseconds){
-  if ($(button).attr("name") != "Reset" && button !== undefined){
-    this.timeout_sound = setTimeout(this.buttonFinished, miliseconds);
+  if ($(button).not(this.$reset)){
+    this.timeout_sound   = setTimeout(this.buttonFinished, miliseconds);
     this.timeout_red_css = setTimeout(this.changeColor, (miliseconds - 15000));
   }
 }
 
-/* Zera as classes de todos os outros botões e aplica a classe no botão
- * passado como parâmetro */
-Pomodoro.prototype.buttonState = function(button, state){
+Pomodoro.prototype.markAsClicked = function(button){
+  var state = 'clicked';
   if (typeof button !== 'undefined'){
     this.$container.find('button').not(button).removeClass();
     $(button).removeClass().addClass(state);
@@ -102,7 +101,7 @@ Pomodoro.prototype.startCountdown = function(button){
   var countdownInMs   = (countdownInMin * 60 * 1000);
   var targetTimestamp = Date.now() + countdownInMs;
 
-  this.buttonState(button, "clicked");
+  this.markAsClicked(button, "clicked");
   this.clearTimeouts();
 
   if (typeof button !== 'undefined'){ this.history(button); }
