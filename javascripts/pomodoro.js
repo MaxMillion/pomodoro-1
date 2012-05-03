@@ -134,7 +134,7 @@ Pomodoro.prototype.startCountdown = function(button){
 
 Pomodoro.prototype.logActionFrom = function(button){
   if (typeof button != 'undefined') {
-    var text = $(button).data("text") || "You started your " + $(button).data("count") + " " ;
+    var text = $(button).data("text") || "You started your " + stringfyOrdinal($(button).data("count")) + " " ;
     var li   = $("<li/>", {"text": text + button.name + " "});
     var date = new Date().toISOString();
 
@@ -148,5 +148,34 @@ Pomodoro.prototype.logActionFrom = function(button){
 Pomodoro.prototype.playAlarm = function (button){
   if (typeof button !== 'undefined'){
     this.$sound.html("<embed src=sounds/" + button.attr("class") + ".wav hidden=true autostart=true loop=false>");
+  }
+}
+function stringfyOrdinal(number) {
+  if (typeof number !== 'undefined') {
+    if(number < 10) {
+      switch(number % 10){
+        case 1:
+          return number.toString()+"-st";
+        case 2:  
+          return number.toString()+"-nd";
+        case 3:
+          return number.toString()+"-rd";  
+        default:
+          return number.toString()+"-th";
+      }
+    } else {
+      switch(number % 100){
+        case 11:
+          return number.toString()+"-th";
+        case 21:  
+          return number.toString()+"-st";
+        case 22:
+          return number.toString()+"-nd";  
+        case 23:
+          return number.toString()+"-rd";  
+        default:
+          return number.toString()+"-th";
+      }
+    }
   }
 }
