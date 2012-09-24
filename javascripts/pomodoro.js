@@ -18,7 +18,7 @@ var Pomodoro = function (container){
   this.timeout_red_css = null;
 
   this.createUI();
-  this.startCountdown();
+  this.startCountdown(false);
 }
 
 Pomodoro.prototype.createButton = function(name, data) {
@@ -86,20 +86,20 @@ Pomodoro.prototype.clearTimeouts = function(){
   clearTimeout(this.timeout_red_css);
 }
 
-Pomodoro.prototype.markAsFinished = function(){
-  var button = $('.' + this.CONST.PRESSED, this.$container);
-  button.toggleClass(this.CONST.PRESSED + ' ' + this.CONST.FINISHED);
-  this.playAlarm(button);
+Pomodoro.prototype.markAsFinished = function(pomodoro){
+  var button = $('.' + pomodoro.CONST.PRESSED, pomodoro.$container);
+  button.toggleClass(pomodoro.CONST.PRESSED + ' ' + pomodoro.CONST.FINISHED);
+  pomodoro.playAlarm(button);
 }
 
-Pomodoro.prototype.theEndIsNear = function (){
-  this.$countdown.toggleClass(this.CONST.NEAR_END);
+Pomodoro.prototype.theEndIsNear = function (pomodoro){
+  pomodoro.$countdown.toggleClass(pomodoro.CONST.NEAR_END);
 }
 
 Pomodoro.prototype.setTimeouts = function(button, miliseconds){
   if ($(button).not(this.$reset)){
-    this.timeout_sound   = setTimeout(this.markAsFinished, miliseconds);
-    this.timeout_red_css = setTimeout(this.theEndIsNear, (miliseconds - 15000));
+    this.timeout_sound   = setTimeout(this.markAsFinished, miliseconds, this);
+    this.timeout_red_css = setTimeout(this.theEndIsNear, (miliseconds - 15000), this);
   }
 }
 
@@ -107,7 +107,6 @@ Pomodoro.prototype.markAsClicked = function(button){
   if (typeof button !== 'undefined'){
     this.$container.find('button').not(button).removeClass();
     $(button).removeClass().addClass(this.CONST.PRESSED);
-    this.playAlarm($(button));
   }
 }
 
@@ -119,8 +118,12 @@ Pomodoro.prototype.startCountdown = function(button){
   this.markAsClicked(button);
   this.clearTimeouts();
 
-  if (typeof button !== 'undefined'){ this.logActionFrom(button); }
-  if (this.$countdown.hasClass(this.CONST.NEAR_END)) { this.theEndIsNear(); }
+  if (button) {
+    this.logActionFrom(button);
+  }
+  if (this.$countdown.hasClass(this.CONST.NEAR_END)) {
+    this.theEndIsNear();
+  }
 
   this.$countdown.countdown('destroy');
   this.$countdown.countdown({
@@ -129,7 +132,9 @@ Pomodoro.prototype.startCountdown = function(button){
     layout: "{mnn}{sep}{snn}"
   });
 
-  this.setTimeouts(button, countdownInMs);
+  if (button) {
+    this.setTimeouts(button, countdownInMs);
+  }
 }
 
 Pomodoro.prototype.logActionFrom = function(button){
@@ -156,10 +161,10 @@ function stringfyOrdinal(number) {
       switch(number % 10){
         case 1:
           return number.toString()+"-st";
-        case 2:  
+        case 2:
           return number.toString()+"-nd";
         case 3:
-          return number.toString()+"-rd";  
+          return number.toString()+"-rd";
         default:
           return number.toString()+"-th";
       }
@@ -167,12 +172,12 @@ function stringfyOrdinal(number) {
       switch(number % 100){
         case 11:
           return number.toString()+"-th";
-        case 21:  
+        case 21:
           return number.toString()+"-st";
         case 22:
-          return number.toString()+"-nd";  
+          return number.toString()+"-nd";
         case 23:
-          return number.toString()+"-rd";  
+          return number.toString()+"-rd";
         default:
           return number.toString()+"-th";
       }
